@@ -114,6 +114,7 @@ If you prefer keeping system functions on F-keys, you can customize VMark shortc
 | Insert Video | — |
 | Insert Audio | — |
 | Insert Table | `Mod + Shift + T` |
+| Table of Contents | _(customizable)_ |
 | Inline Math | `Alt + Mod + M` |
 | Math Block | `Alt + Mod + Shift + M` |
 | Insert Note | `Alt + Mod + N` |
@@ -175,6 +176,7 @@ If you prefer keeping system functions on F-keys, you can customize VMark shortc
 | Toggle File Explorer | `Ctrl + Shift + 2` |
 | Toggle History | `Ctrl + Shift + 3` |
 | Toggle Knowledge Base | `Ctrl + Shift + 4` |
+| Toggle Window Status | `Ctrl + Shift + 5` |
 | Toggle Line Numbers (code blocks) | `Alt + Mod + L` |
 | Toggle Terminal | Ctrl + `` ` `` |
 | Toggle Diagram Preview | `Alt + Mod + P` |
@@ -240,6 +242,7 @@ If you prefer keeping system functions on F-keys, you can customize VMark shortc
 | Next Tab | `Mod + Shift + ]` |
 | Previous Tab | `Mod + Shift + [` |
 | Close Tab | `Mod + W` |
+| Reopen Closed Tab | _(customizable)_ |
 | Toggle Hidden Files | `Mod + Shift + .` |
 | Toggle All Files | `Mod + Shift + A` |
 
@@ -253,8 +256,10 @@ Paragraph's `Mod + Shift + 0`.
 
 ::: tip New Browser Tab
 `Alt + Mod + Shift + B` opens an embedded browser tab, and also appears in the
-**File** menu. It is greyed out until you enable the embedded browser (off by
-default — turn it on under Settings → Advanced).
+**File** menu. The embedded browser is on by default on macOS; if you turn it
+off under **Settings → Advanced → Embedded browser**, the menu item is hidden
+(not greyed out) until you turn it back on. The browser is macOS-only, so the
+item never appears on Windows or Linux.
 
 It is a real menu item rather than only a keyboard binding, and that matters: once
 a web page has keyboard focus, the browser engine consumes key presses before VMark

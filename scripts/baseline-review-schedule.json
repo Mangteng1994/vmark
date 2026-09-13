@@ -33,11 +33,13 @@
     ".dependency-cruiser-known-violations.json": "down — each frozen edge either deleted or re-expressed through a plugins/shared seam",
     "scripts/plugin-store-coupling-baseline.json": "zero on every channel — options and seams, not ambient lookups",
     "scripts/file-size-baseline.json": "down — split files, lower the number; never raise",
+    "scripts/test-only-modules-baseline.json": "zero — each module wired from a production root, or deleted (feature-ledger plan, Phase 3)",
+    "scripts/header-references-baseline.json": "zero — each header repointed at the file that exists, or the dead reference removed (feature-ledger plan, Phase 4)",
     "scripts/bespoke-buttons-baseline.json": "down — each bespoke class converted to .vm-btn / .popup-icon-btn",
     "scripts/extension-budget.json": "down — per-edge licenses retired as plugins decouple",
     "src/utils/markdownPipeline/__tests__/spec/specDeltas.json": "down — each declared divergence fixed or ruled a deliberate dialect choice",
     "src/utils/markdownPipeline/__tests__/spec/specRoundtripDeltas.json": "down — same",
-    "src/utils/markdownPipeline/conformance/expectedDeltas.ts": "down — same",
+    "src/utils/markdownPipeline/__tests__/conformance/expectedDeltas.ts": "down — same",
     "src/utils/markdownPipeline/__tests__/fidelity/fidelityLedger.ts": "down — same",
     "scripts/test-types-baseline.json": "zero — every test file typechecks under tsconfig.test.json; 2,503 errors in 376 files on adoption, all pre-existing",
     "scripts/theme-contrast-baseline.json": "failing lists empty for every theme — Phase 1 of the UI-consistency plan retints the catalog; ansiFloor/exempt stay as reasoned permanent exceptions (D10)",
@@ -64,6 +66,7 @@
     "scripts/baseline-review-schedule.json": "The register itself. Its `tracked` list is an identity set the ratchet holds, but a register of registers is bureaucracy, not debt.",
     "scripts/merge-drop-allowlist.json": "Already zero (WI-DP1.1): both claims verified as real relocations and removed. The gate keeps it empty, so there is nothing left to schedule.",
     "scripts/type-aware-baseline.json": "Already zero (2026-08-14): opened at 152 findings on adoption and all 152 were paid down the same day — 132 unhandled promises, 16 [object Object] sites, and a never-typed guard that made pointer arithmetic operate on never. The file is empty and the gate keeps it there, so there is nothing left to schedule. A new entry is a real regression, not a number to raise.",
-    "scripts/knip-baseline.json": "Already zero (WI-DP1.2): all 75 warn-tier findings resolved. The gate keeps it at zero, so there is nothing left to schedule."
+    "scripts/knip-baseline.json": "Already zero (WI-DP1.2): all 75 warn-tier findings resolved. The gate keeps it at zero, so there is nothing left to schedule.",
+    "scripts/npm-audit-baseline.json": "A registry of REVIEWED advisory acceptances, each carrying the reason it is unreachable in the shipped app, and checked for staleness in both directions (an acceptance fails once its advisory is gone). Not a number to drive down: its size tracks what upstream publishes, not anything this repo controls, and several entries have no patched version to move to. Same character as i18nIdenticalAllowlist.ts (audit 20260906, C3)."
   }
 }
