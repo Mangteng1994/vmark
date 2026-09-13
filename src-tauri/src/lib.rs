@@ -160,6 +160,7 @@ pub fn run() {
         })
         .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_notification::init())
+        .plugin(tauri_plugin_tts::init())
         .plugin(
             tauri_plugin_window_state::Builder::new()
                 .with_denylist(&["settings", "pdf-export"])

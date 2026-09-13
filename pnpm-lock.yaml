@@ -297,6 +297,9 @@ importers:
       sonner:
         specifier: ^2.0.8
         version: 2.0.8(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      tauri-plugin-tts-api:
+        specifier: 0.1.13
+        version: 0.1.13
       turndown:
         specifier: ^7.2.4
         version: 7.2.4
@@ -8452,6 +8455,9 @@ packages:
   tar@7.5.22:
     resolution: {integrity: sha512-MFO/QzvtAOmJbkhOaCTvbGcFN9L9b+JunIsDwaKljSOdcLMea3NJ1k9Usz/rjdfSXTq4dfzfeS7W4p4YOAAHeA==}
     engines: {node: '>=18'}
+
+  tauri-plugin-tts-api@0.1.13:
+    resolution: {integrity: sha512-i/uq68I1OxveTh8nfOi9FRp38UBJtOiMnpMR4lipwdXIbL7ALvAw/30kmtOWiF5IkdBJZDz/PxsoyBmKbbm3VQ==}
 
   teex@1.0.1:
     resolution: {integrity: sha512-eYE6iEI62Ni1H8oIa7KlDU6uQBtqr4Eajni3wX7rpfXD8ysFx8z0+dri+KWEPWpBsxXfxu58x/0jvTVT1ekOSg==}
@@ -18636,6 +18642,10 @@ snapshots:
       minipass: 7.1.3
       minizlib: 3.1.0
       yallist: 5.0.0
+
+  tauri-plugin-tts-api@0.1.13:
+    dependencies:
+      '@tauri-apps/api': 2.11.1
 
   teex@1.0.1:
     dependencies:

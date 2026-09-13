@@ -82,6 +82,7 @@ import { StatusBar } from "./StatusBar";
 import { useUIStore } from "@/stores/uiStore";
 import { useShortcutsStore, formatKeyForDisplay } from "@/stores/settingsStore";
 import { useTabStore } from "@/stores/tabStore";
+import { useReadAloudStore } from "@/features/readAloud/readAloudStore";
 
 // Local ResizeObserver shim — `src/test/setup.ts` deliberately defines no
 // global one (see its note). This file renders StatusBarTabStrip, which since
@@ -98,6 +99,7 @@ vi.stubGlobal(
 describe("StatusBar accessibility", () => {
   beforeEach(() => {
     useUIStore.setState({ sidebarVisible: false, statusBarVisible: true });
+    useReadAloudStore.setState({ status: "idle" });
     useShortcutsStore.setState({ customBindings: {} });
   });
 
@@ -141,6 +143,7 @@ describe("StatusBar accessibility", () => {
 describe("StatusBar — browser workspace (WI-S1.3)", () => {
   beforeEach(() => {
     useUIStore.setState({ sidebarVisible: true, statusBarVisible: true });
+    useReadAloudStore.setState({ status: "idle" });
     useTabStore.setState({
       tabs: {},
       activeTabId: {},
@@ -183,5 +186,14 @@ describe("StatusBar — browser workspace (WI-S1.3)", () => {
     useTabStore.getState().setActiveTab("main", id);
     const { container } = render(<StatusBar />);
     expect(container).toBeEmptyDOMElement();
+  });
+
+  it("temporarily shows the hidden bar while read-aloud is active", () => {
+    useUIStore.setState({ sidebarVisible: true, statusBarVisible: false });
+    useReadAloudStore.setState({ status: "playing" });
+    const id = useTabStore.getState().createTab("main", null);
+    useTabStore.getState().setActiveTab("main", id);
+    render(<StatusBar />);
+    expect(screen.getByTestId("status-bar-right")).toBeInTheDocument();
   });
 });

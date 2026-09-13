@@ -46,6 +46,7 @@ tauri-plugin-updater = "2"
 tauri-plugin-process = "2"
 tauri-plugin-notification = "2"
 tauri-plugin-log = "2"
+tauri-plugin-tts = "=0.1.13"
 log = "0.4"
 serde = { version = "1", features = ["derive"] }
 # WI-14: derive macro for the crate-wide `CommandError`. dtolnay's crate, the

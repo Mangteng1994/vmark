@@ -35,4 +35,8 @@ describe("first-install defaults are non-destructive", () => {
   it("shows file extensions", () => {
     expect(defaultSettings.general.showFileExtensions).toBe(true);
   });
+
+  it("enables native read aloud by default", () => {
+    expect(defaultSettings.speech.enabled).toBe(true);
+  });
 });

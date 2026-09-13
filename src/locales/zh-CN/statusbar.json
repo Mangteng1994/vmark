@@ -7,6 +7,8 @@
   "mcpStatus": "MCP 状态",
   "mcpError": "MCP 错误:{{error}}",
   "mcpStarting": "MCP 正在启动...",
+  "readAloudProgress": "正在朗读，第 {{current}} / {{total}} 句",
+  "readAloudError": "朗读出错",
   "mcpStopped": "MCP 已停止 · 点击启动",
   "mcpNoClients": "MCP 就绪 · 未连接 AI",
   "mcpConnected": "已连接:{{clients}}",

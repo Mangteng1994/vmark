@@ -7,6 +7,8 @@
   "mcpStatus": "Estado de MCP",
   "mcpError": "Error de MCP: {{error}}",
   "mcpStarting": "Iniciando MCP...",
+  "readAloudProgress": "Leyendo en voz alta, frase {{current}} de {{total}}",
+  "readAloudError": "Error de lectura en voz alta",
   "mcpStopped": "MCP detenido · Haz clic para iniciar",
   "mcpNoClients": "MCP listo · Sin IA conectada",
   "mcpConnected": "Conectado: {{clients}}",

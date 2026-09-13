@@ -22,6 +22,7 @@ import { registerEditorCommands } from "./editorCommandBridge";
 import { registerTabCommands } from "./tabCommands";
 import { registerFileCommands } from "./fileCommands";
 import { registerGenieCommands } from "./genieCommands";
+import { registerReadAloudCommands } from "./readAloudCommands";
 
 /** Register every command group; returns the disposer of the editor batch. */
 export function registerAllCommands(): () => void {
@@ -38,6 +39,7 @@ export function registerAllCommands(): () => void {
   registerTabCommands();
   registerFileCommands();
   registerGenieCommands();
+  registerReadAloudCommands();
   // Lift every editor ActionId into the bus so the palette can find them
   // (WI-3.4). Owner-based batch registration is HMR-safe (replace-own).
   return registerEditorCommands();

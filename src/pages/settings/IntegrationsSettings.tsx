@@ -18,6 +18,7 @@ import { RefreshCw, Users, ExternalLink } from "lucide-react";
 import type { ProviderType } from "@/types/aiGenies";
 import { RestProviderConfigFields } from "./RestProviderConfigFields";
 import { ProviderRadio } from "./ProviderRadio";
+import { stopReadAloud } from "@/features/readAloud/runtime";
 
 function StatusBadge({ running, loading }: { running: boolean; loading: boolean }) {
   const { t } = useTranslation("settings");
@@ -52,6 +53,8 @@ export function IntegrationsSettings() {
   const { t } = useTranslation("settings");
   const mcpSettings = useSettingsStore((state) => state.advanced.mcpServer);
   const updateAdvancedSetting = useSettingsStore((state) => state.updateAdvancedSetting);
+  const readAloudEnabled = useSettingsStore((state) => state.speech.enabled);
+  const updateSpeechSetting = useSettingsStore((state) => state.updateSpeechSetting);
 
   const { running, port, loading, error, start, stop } = useMcpServer();
   const { runHealthCheck, isChecking, version, toolCount, resourceCount } = useMcpHealthCheck();
@@ -122,8 +125,19 @@ export function IntegrationsSettings() {
     }
   };
 
+  const handleReadAloudChange = (enabled: boolean) => {
+    updateSpeechSetting("enabled", enabled);
+    if (!enabled) void stopReadAloud();
+  };
+
   return (
     <div>
+      <SettingsGroup title={t("integrations.group.readAloud")}>
+        <SettingRow label={t("integrations.readAloud.label")} description={t("integrations.readAloud.description")}>
+          <Toggle checked={readAloudEnabled} onChange={handleReadAloudChange} />
+        </SettingRow>
+      </SettingsGroup>
+
       <SettingsGroup title={t("integrations.group.mcp")}>
         <SettingRow
           label={t("integrations.enableMcp.label")}

@@ -38,6 +38,7 @@ import { StatusBarAiIndicator } from "./StatusBarAiIndicator";
 import { McpHistoryButton } from "@/components/McpHistory";
 import { LintBadge } from "./LintBadge";
 import type { McpClient } from "@/hooks/useMcpClients";
+import { ReadAloudIndicator } from "./ReadAloudIndicator";
 
 const UPPERCASE_WORDS = new Set(["cli", "ai", "mcp", "api", "ide"]);
 
@@ -151,6 +152,8 @@ export function StatusBarRight({
       )}
 
       <StatusBarCounts />
+
+      <ReadAloudIndicator />
 
       <LintBadge />
 

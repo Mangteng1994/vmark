@@ -177,6 +177,7 @@ export const initialState: SettingsState = {
     aiSession: "sandbox",
     aiAllowLoopback: false,
   },
+  speech: { enabled: true },
   // Advanced is visible by default, because it now hosts the OFF switch for a
   // default-on feature. Truly developer-only content inside it (Experimental,
   // Hot Exit dev tools) stays behind the Developer-mode toggle, so this reveals
