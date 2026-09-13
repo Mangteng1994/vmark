@@ -119,17 +119,20 @@ export function resolveCommandContext(windowLabel: string): CommandContextResolv
   const editorState = useEditorStore.getState();
 
   let editorAvailable: boolean;
+  let hasSelection: boolean;
   let cursor: CursorAxes;
   let multiCtx: MultiSelectionContext | null;
   if (mode === "source") {
     const view = editorState.active.activeSourceView;
     editorAvailable = !!view;
+    hasSelection = view?.state?.selection?.ranges.some((range) => !range.empty) ?? false;
     cursor = editorState.source.context;
     multiCtx = view ? getSourceMultiSelectionContext(view, editorState.source.context) : null;
   } else {
     const editor = editorState.active.activeWysiwygEditor;
     const view = editor?.view ?? null;
     editorAvailable = !!view;
+    hasSelection = view?.state?.selection?.empty === false;
     cursor = editorState.tiptap.context;
     multiCtx = view ? getWysiwygMultiSelectionContext(view, null) : null;
   }
@@ -144,7 +147,9 @@ export function resolveCommandContext(windowLabel: string): CommandContextResolv
     formatId,
     editorAvailable,
     readOnly,
-    hasSelection: cursor?.hasSelection ?? false,
+    // Cursor decorations can lag behind a transaction or a context-menu focus change.
+    // Command availability must follow the live selection, including its removal.
+    hasSelection,
     multiSelection,
     inTable: !!cursor?.inTable,
     inLink: !!cursor?.inLink,

@@ -62,8 +62,8 @@ import { useStatusToasts } from "@/hooks/useStatusToasts";
 import { useStatusBarTabDrag } from "./useStatusBarTabDrag";
 import { useQuitFeedback } from "./useQuitFeedback";
 import { ARIA_LIVE_STYLE, preventSelectAllOnButtons } from "./statusBarHelpers";
+import { useReadAloudStore } from "@/features/readAloud/readAloudStore";
 import "./StatusBar.css";
-
 /** Bottom bar combining tab strip, word/char counts, auto-save indicator, AI status, and mode toggle. */
 export function StatusBar() {
   const { t } = useTranslation("statusbar");
@@ -86,11 +86,11 @@ export function StatusBar() {
   const aiError = useAiInvocationStore((state) => state.error);
   const aiShowSuccess = useAiInvocationStore((state) => state.showSuccess);
   const aiHasActiveStatus = useAiInvocationStore((state) => state.hasActiveStatus);
+  const speechHasActiveStatus = useReadAloudStore((state) => state.status !== "idle");
   const { running: mcpRunning, loading: mcpLoading, error: mcpError } = useMcpServer();
   const mcpClients = useMcpClients(mcpRunning);
   const { activeTabId, browserWorkspace } = useBrowserWorkspaceState();
   const activeBrowserTabId = browserWorkspace.activeBrowserPageId;
-
   const openMcpSettings = useCallback(() => openSettingsWindow("integrations"), []);
   const handleRetryAi = useCallback(() => {
     // Dismiss error in status bar — user can retry from the picker or resubmit
@@ -187,7 +187,7 @@ export function StatusBar() {
 
   // A browser tab keeps the workspace bar even when hidden (F7): it remains
   // the user's route back to the Browser workspace and its page tabs.
-  if (!statusBarVisible && !aiHasActiveStatus && !activeBrowserTabId) return null;
+  if (!statusBarVisible && !aiHasActiveStatus && !speechHasActiveStatus && !activeBrowserTabId) return null;
 
   return (
     <>

@@ -89,6 +89,10 @@ export interface BrowserSettings {
   aiAllowLoopback: boolean;
 }
 
+export interface SpeechSettings {
+  enabled: boolean;
+}
+
 /** General settings — auto-save, document history, tab size, line endings, and quit behavior. */
 export interface GeneralSettings {
   // Auto-save

@@ -50,7 +50,7 @@ vi.mock("@/plugins/toolbarActions/multiSelectionContext", () => ({
 
 import { resolveCommandContext } from "./commandContext";
 
-const VIEW = {} as object;
+const VIEW = { state: { selection: { empty: true, ranges: [{ empty: true }] } } };
 
 function docTab(id: string, formatId = "markdown"): Tab {
   return { id, title: id, kind: "document", filePath: `/${id}.md`, formatId } as unknown as Tab;
@@ -116,6 +116,28 @@ describe("resolveCommandContext — read-only (Phase 2b)", () => {
 });
 
 describe("resolveCommandContext", () => {
+  it.each([true, false])("reads the live WYSIWYG selection when cached selection is %s", (cached) => {
+    ed.tiptapContext = { hasSelection: cached };
+    ed.wysiwyg = { view: { state: { selection: { empty: cached } } } };
+    expect(resolveCommandContext("main").hasSelection).toBe(!cached);
+  });
+
+  it.each([true, false])("reads live Source ranges when cached selection is %s", (cached) => {
+    ui.sourceMode = true;
+    ed.sourceContext = { hasSelection: cached };
+    ed.source = { state: { selection: { ranges: [{ empty: true }, { empty: cached }] } } };
+    expect(resolveCommandContext("main").hasSelection).toBe(!cached);
+  });
+
+  it.each([true, false])("does not retain selection after unmount in source mode %s", (sourceMode) => {
+    ui.sourceMode = sourceMode;
+    ed.source = null;
+    ed.wysiwyg = null;
+    ed.sourceContext = { hasSelection: true };
+    ed.tiptapContext = { hasSelection: true };
+    expect(resolveCommandContext("main").hasSelection).toBe(false);
+  });
+
   it("reports a live document tab + its format", () => {
     const c = resolveCommandContext("main");
     expect(c.isDocument).toBe(true);
@@ -159,6 +181,7 @@ describe("resolveCommandContext", () => {
   });
 
   it("normalises EVERY axis of the WYSIWYG cursor context (optional-truthy shape)", () => {
+    ed.wysiwyg = { view: { state: { selection: { empty: false } } } };
     ed.tiptapContext = {
       hasSelection: true,
       inTable: { row: 0 },

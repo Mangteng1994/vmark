@@ -21,6 +21,9 @@ import { useLinkPopupStore } from "@/stores/linkPopupStore";
 import type { EditorContextMenuSnapshot } from "@/types/editorContextMenu";
 import { focusEditorSurface, runClipboardCommand } from "./clipboardBridge";
 import type { EditorMenuRun } from "./menuModel";
+import { executeCommand } from "@/services/commands/CommandBus";
+import { resolveCommandContext } from "@/services/commands/commandContext";
+import { getCurrentWindowLabel } from "@/services/persistence/workspaceStorage";
 
 /**
  * True when [from, to) is still ONE continuous link with `href` in the
@@ -128,5 +131,10 @@ export async function runEditorMenuItem(
       return;
     case "link":
       await runLinkCommand(run.command, snapshot);
+      return;
+    case "command": {
+      const label = getCurrentWindowLabel();
+      await executeCommand(run.command, undefined, resolveCommandContext(label));
+    }
   }
 }

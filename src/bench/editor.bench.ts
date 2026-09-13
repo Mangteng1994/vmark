@@ -29,13 +29,13 @@
  *     floor for "real" change. See vitest's bench output for the per-bench
  *     stddev and margin of error.
  *
- * @module bench/editor
+ * @module bench/editor.bench
  */
 
 import { bench, describe } from "vitest";
 import { Editor } from "@tiptap/core";
 import { EditorState } from "@tiptap/pm/state";
-import { createTiptapExtensions } from "@/services/assembly/tiptapExtensions";
+import { createTiptapExtensions } from "@/services/assembly/createTiptapExtensions";
 import {
   generateMarkdown,
   generateMarkdownWithCodeBlocks,

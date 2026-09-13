@@ -13,6 +13,7 @@ import type { ImageSettings, MarkdownSettings } from "./content";
 import type { AdvancedSettingsState, TerminalSettings } from "./system";
 import type {
   BrowserSettings,
+  SpeechSettings,
   FormatsSettings,
   GeneralSettings,
   LargeFileSettings,
@@ -36,6 +37,7 @@ export interface SettingsState {
   largeFile: LargeFileSettings;
   formats: FormatsSettings;
   browser: BrowserSettings;
+  speech: SpeechSettings;
   // UI state
   showDevSection: boolean;
 }
@@ -56,6 +58,7 @@ export interface SettingsActions {
   updateLargeFileSetting: SettingUpdater<LargeFileSettings>;
   updateFormatsSetting: SettingUpdater<FormatsSettings>;
   updateBrowserSetting: SettingUpdater<BrowserSettings>;
+  updateSpeechSetting: SettingUpdater<SpeechSettings>;
   toggleDevSection: () => void;
   resetSettings: () => void;
 }

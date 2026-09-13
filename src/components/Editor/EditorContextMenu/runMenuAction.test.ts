@@ -11,6 +11,8 @@ const mocks = vi.hoisted(() => ({
   focusEditorSurface: vi.fn(),
   writeText: vi.fn(async () => undefined),
   runOrQueueCodeMirrorAction: vi.fn((_view: unknown, action: () => void) => action()),
+  executeCommand: vi.fn(async () => true),
+  resolveCommandContext: vi.fn(() => ({ windowLabel: "doc-1" })),
 }));
 
 vi.mock("@/plugins/toolbarActions/dispatch", () => ({
@@ -24,6 +26,13 @@ vi.mock("./clipboardBridge", () => ({
   focusEditorSurface: mocks.focusEditorSurface,
 }));
 vi.mock("@tauri-apps/plugin-clipboard-manager", () => ({ writeText: mocks.writeText }));
+vi.mock("@/services/commands/CommandBus", () => ({ executeCommand: mocks.executeCommand }));
+vi.mock("@/services/commands/commandContext", () => ({
+  resolveCommandContext: mocks.resolveCommandContext,
+}));
+vi.mock("@/services/persistence/workspaceStorage", () => ({
+  getCurrentWindowLabel: () => "doc-1",
+}));
 
 import { runEditorMenuItem } from "./runMenuAction";
 import { useEditorStore } from "@/stores/editorStore";
@@ -72,6 +81,19 @@ describe("runEditorMenuItem", () => {
     await runEditorMenuItem({ type: "clipboard", command: "paste" }, snapshot());
     expect(mocks.runClipboardCommand).toHaveBeenCalledWith("paste", "wysiwyg");
     expect(mocks.dispatchEditorAction).not.toHaveBeenCalled();
+  });
+
+  it("routes read-aloud items through the command bus with live window context", async () => {
+    await runEditorMenuItem(
+      { type: "command", command: "speech.readFromCursor" },
+      snapshot(),
+    );
+    expect(mocks.resolveCommandContext).toHaveBeenCalledWith("doc-1");
+    expect(mocks.executeCommand).toHaveBeenCalledWith(
+      "speech.readFromCursor",
+      undefined,
+      { windowLabel: "doc-1" },
+    );
   });
 
   it("copyLink writes the resolved href to the clipboard", async () => {

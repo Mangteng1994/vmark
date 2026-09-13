@@ -70,6 +70,7 @@ describe("buildEditorContextMenu — sections", () => {
     expect(sectionIds(sections)).toEqual([
       "clipboard",
       "selection",
+      "speech",
       "inline",
       "block",
       "link",
@@ -78,28 +79,28 @@ describe("buildEditorContextMenu — sections", () => {
 
   it("hides inline, block, and link sections inside a code block", () => {
     const sections = buildEditorContextMenu(snapshot({ inCodeBlock: true }));
-    expect(sectionIds(sections)).toEqual(["clipboard", "selection"]);
+    expect(sectionIds(sections)).toEqual(["clipboard", "selection", "speech"]);
   });
 
   it("hides formatting sections when paragraphFormatting policy is off", () => {
     const sections = buildEditorContextMenu(
       snapshot({ formatPolicy: { paragraphFormatting: false, insertBlockActions: false } })
     );
-    expect(sectionIds(sections)).toEqual(["clipboard", "selection"]);
+    expect(sectionIds(sections)).toEqual(["clipboard", "selection", "speech"]);
   });
 
   it("keeps the link section when only insertBlockActions is allowed", () => {
     const sections = buildEditorContextMenu(
       snapshot({ formatPolicy: { paragraphFormatting: false, insertBlockActions: true } })
     );
-    expect(sectionIds(sections)).toEqual(["clipboard", "selection", "link"]);
+    expect(sectionIds(sections)).toEqual(["clipboard", "selection", "speech", "link"]);
   });
 
   it("hides the code-block item but keeps the block section when insertBlockActions is off", () => {
     const sections = buildEditorContextMenu(
       snapshot({ formatPolicy: { paragraphFormatting: true, insertBlockActions: false } })
     );
-    expect(sectionIds(sections)).toEqual(["clipboard", "selection", "inline", "block"]);
+    expect(sectionIds(sections)).toEqual(["clipboard", "selection", "speech", "inline", "block"]);
     expect(findItem(sections, "codeBlock")).toBeUndefined();
   });
 });
@@ -123,6 +124,26 @@ describe("buildEditorContextMenu — clipboard", () => {
     const sections = buildEditorContextMenu(snapshot());
     expect(action(sections, "paste").run).toEqual({ type: "clipboard", command: "paste" });
     expect(action(sections, "selectAll").run).toEqual({ type: "clipboard", command: "selectAll" });
+  });
+});
+
+describe("buildEditorContextMenu — read aloud", () => {
+  it("always offers reading from the cursor", () => {
+    const sections = buildEditorContextMenu(snapshot());
+    expect(action(sections, "readFromCursor").run).toEqual({
+      type: "command",
+      command: "speech.readFromCursor",
+    });
+  });
+
+  it("offers selection speech only for a non-empty selection", () => {
+    expect(findItem(buildEditorContextMenu(snapshot()), "readSelection")).toBeUndefined();
+    expect(
+      action(
+        buildEditorContextMenu(snapshot({ selectionEmpty: false })),
+        "readSelection",
+      ).run,
+    ).toEqual({ type: "command", command: "speech.readSelection" });
   });
 });
 

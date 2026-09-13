@@ -45,6 +45,7 @@ export type {
   FormatsSettings,
   LargeFileSettings,
   BrowserSettings,
+  SpeechSettings,
   GeneralSettings,
   UpdateCheckFrequency,
   UpdateSettings,

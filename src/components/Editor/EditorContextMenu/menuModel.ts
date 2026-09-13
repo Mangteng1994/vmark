@@ -28,7 +28,8 @@ import type { EditorContextMenuSnapshot } from "@/types/editorContextMenu";
 export type EditorMenuRun =
   | { type: "adapter"; action: AdapterAction }
   | { type: "clipboard"; command: "cut" | "copy" | "paste" | "selectAll" }
-  | { type: "link"; command: "editLink" | "copyLink" | "removeLink" };
+  | { type: "link"; command: "editLink" | "copyLink" | "removeLink" }
+  | { type: "command"; command: "speech.readSelection" | "speech.readFromCursor" };
 
 export interface EditorMenuAction {
   kind: "action";
@@ -94,6 +95,11 @@ const SELECT_ALL_ITEM: ContextMenuItemDescriptor = {
   id: "selectAll", labelKey: "contextMenu.selectAll", run: { type: "clipboard", command: "selectAll" }, iconId: "selectAll", shortcutKey: "Mod-a",
 };
 
+const [READ_SELECTION_ITEM, READ_FROM_CURSOR_ITEM]: [ContextMenuItemDescriptor, ContextMenuItemDescriptor] = [
+  { id: "readSelection", labelKey: "commands:speech.readSelection", run: { type: "command", command: "speech.readSelection" } },
+  { id: "readFromCursor", labelKey: "commands:speech.readFromCursor", run: { type: "command", command: "speech.readFromCursor" } },
+];
+
 const INLINE_ITEMS: AdapterMenuDescriptor[] = [
   { id: "bold", labelKey: "contextMenu.bold", run: { type: "adapter", action: "bold" }, iconId: "bold", shortcutId: "bold", checkable: true },
   { id: "italic", labelKey: "contextMenu.italic", run: { type: "adapter", action: "italic" }, iconId: "italic", shortcutId: "italic", checkable: true },
@@ -143,6 +149,8 @@ const REMOVE_LINK_ITEM: ContextMenuItemDescriptor = {
 export const CONTEXT_MENU_DESCRIPTORS: ContextMenuItemDescriptor[] = [
   ...CLIPBOARD_ITEMS,
   SELECT_ALL_ITEM,
+  READ_SELECTION_ITEM,
+  READ_FROM_CURSOR_ITEM,
   ...INLINE_ITEMS,
   ...HEADING_CHILDREN,
   ...LIST_CHILDREN,
@@ -259,6 +267,7 @@ export function buildEditorContextMenu(
       ),
     },
     { id: "selection", items: [toAction(SELECT_ALL_ITEM)] },
+    { id: "speech", items: [...(!snapshot.selectionEmpty ? [toAction(READ_SELECTION_ITEM)] : []), toAction(READ_FROM_CURSOR_ITEM)] },
   ];
 
   const showFormatting = !snapshot.inCodeBlock && snapshot.formatPolicy.paragraphFormatting;

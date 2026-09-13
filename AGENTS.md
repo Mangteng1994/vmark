@@ -249,6 +249,12 @@ Shared instructions for all AI agents (Claude, Codex, etc.).
     marked file falls back to jsdom silently, and the only symptom is a slower
     run.
 
+    The directive is matched anywhere in the file's leading docblock, so never
+    QUOTE the token in a header comment: a test whose prose said "unlike
+    `@vitest-environment node` files…" silently ran under node, and even an
+    explicit `--environment=jsdom` could not override it (found while writing
+    `registrationFlag.test.ts`). Paraphrase, or the sentence becomes the setting.
+
   - **Pushes to `main` and `v*` tags are gated at push time.** A versioned
     `pre-push` hook (`.githooks/pre-push`) gates release tags by verifying —
     via `gh api` (`scripts/check-tag-green.sh`, seconds per tag) — that the
@@ -479,6 +485,26 @@ Shared instructions for all AI agents (Claude, Codex, etc.).
     scan reports 7, all real. A command that hands creation to a spawned task is
     exempt via `// window-thread-ok: <reason>` — the reason is required.
 
+    **A METHOD call is not an edge across files, and that rule is load-bearing
+    too.** On 2026-09-07 the gate went red on seven commands that create no
+    window — `read_workspace_config`, `update_recent_files`,
+    `mcp_config_install` and four others. Nothing about them had changed: an
+    unrelated `pub(super) fn settle` was added to `pdf_export/renderer/sink.rs`,
+    and `\bsettle\s*\(` matched `owned.settle(...)` in
+    `browser/nav_kvo_macos.rs` on a completely different type. That one bogus
+    edge, plus the equally common `.run(`, `drop(` and `create(`, opened an
+    11-hop chain into the seed set. Converting those seven commands to `async`
+    would have been a real change made for a phantom.
+
+    So a receiver call (`x.name(`) counts only WITHIN one file, where the
+    receiver's type is at least plausibly local; free and path-qualified calls
+    still cross files. The fix was found by BISECTION, not inspection — revert
+    a directory, re-run, repeat — and regression-checked the only way that
+    proves a detector still detects: de-async the seven real #1301 commands in
+    a pristine HEAD tree and confirm the new scan reports the identical seven.
+    Do that whenever this scan is narrowed; a reachability gate that has quietly
+    stopped reaching looks exactly like a clean tree.
+
     **Going async removes serialization the blocking IPC loop used to provide**,
     and two orderings had been relying on it. The Settings singleton's
     check-then-create became a real race, so creation is now IDEMPOTENT: the
@@ -681,7 +707,12 @@ Shared instructions for all AI agents (Claude, Codex, etc.).
 
   - **Backtick shortcut escaping**: ProseMirror format `"Ctrl-\`"`, Tauri format `"Ctrl+\`"\`.
 
-  - **Architecture overview**: See `dev-docs/architecture.md` for C4 diagram, entry points, data flows, and module map.
+  - **Architecture overview**: `dev-docs/architecture-metrics.md` (generated coupling
+    metrics — regenerate with `pnpm arch:metrics`) and
+    `dev-docs/20260803-architecture-review-note.md` (the review's action summary,
+    which links the full findings under `dev-docs/deep-researches/`). Both are
+    maintainer-local. There is no `dev-docs/architecture.md`; this used to point
+    at one, and it has never existed (audit 20260906, C9).
 
   - **Three-tier source layout** (ADR-013):
     | Tier | May import | Examples |
